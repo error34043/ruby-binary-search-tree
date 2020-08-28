@@ -37,6 +37,7 @@ class Tree
   def insert(data, target_node = @root)
     new_node = Node.new(data)
     return new_node if target_node.nil?
+    
     comparison = new_node <=> target_node
     if comparison == -1
       target_node.left_child = insert(data, target_node.left_child)
@@ -45,7 +46,6 @@ class Tree
     else
       return new_node
     end
-
     target_node
   end
 
