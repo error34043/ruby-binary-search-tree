@@ -100,6 +100,39 @@ class Tree
     output
   end
 
+  def inorder(current_node = @root)
+    return [] if current_node.nil?
+
+    output = []
+    output.push(*inorder(current_node.left_child)) unless current_node.left_child.nil?
+    output << current_node.data
+    output.push(*inorder(current_node.right_child)) unless current_node.right_child.nil?
+
+    output
+  end
+
+  def preorder(current_node = @root)
+    return [] if current_node.nil?
+
+    output = []
+    output << current_node.data
+    output.push(*preorder(current_node.left_child)) unless current_node.left_child.nil?
+    output.push(*preorder(current_node.right_child)) unless current_node.right_child.nil?
+
+    output
+  end
+
+  def postorder(current_node = @root)
+    return [] if current_node.nil?
+
+    output = []
+    output.push(*postorder(current_node.left_child)) unless current_node.left_child.nil?
+    output.push(*postorder(current_node.right_child)) unless current_node.right_child.nil?
+    output << current_node.data
+
+    output
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -113,8 +146,5 @@ test = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 # test = [8, 6, 5, 4, 3, 2, 1]
 test_tree = Tree.new(test)
 puts test_tree.pretty_print
-p test_tree.level_order
-test_tree.insert(107)
-puts test_tree.pretty_print
-p test_tree.level_order
+p test_tree.postorder
 # puts test_tree.pretty_print
