@@ -50,8 +50,29 @@ class Tree
     target_node
   end
 
-  def delete
+  def successor(target_node)
+    test_node = target_node
+    loop do      
+      return test_node if test_node.left_child.nil?
+      test_node = test_node.left_child
+    end
+  end
 
+  def delete(value, target_node = @root)
+    return nil if target_node.nil?
+
+    target_node.left_child = delete(value, target_node.left_child) if value < target_node.data
+    target_node.right_child = delete(value, target_node.right_child) if value > target_node.data
+
+    if value == target_node.data
+      return target_node.left_child if target_node.right_child.nil?
+      return target_node.right_child if target_node.left_child.nil?
+
+      x = successor(target_node.right_child)
+      target_node = delete(x.data, target_node)
+      target_node.data = x.data
+    end
+    target_node
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
@@ -66,7 +87,6 @@ end
 # test = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 test = [7, 6, 5, 4, 3, 2, 1]
 test_tree = Tree.new(test)
-test_tree.insert(9)
-test_tree.insert(-3)
-test_tree.insert(3)
+puts test_tree.pretty_print
+test_tree.delete(4)
 puts test_tree.pretty_print
