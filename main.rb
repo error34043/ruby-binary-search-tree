@@ -87,6 +87,19 @@ class Tree
     end
   end
 
+  def level_order(current_node = @root)
+    return [] if current_node.nil?
+    queue = [current_node]
+    output = []
+    until queue.empty?
+      visiting = queue.shift
+      output << visiting.data
+      queue << visiting.left_child unless visiting.left_child.nil? 
+      queue << visiting.right_child unless visiting.right_child.nil?
+    end
+    output
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -96,9 +109,12 @@ end
 
 
 ### TESTING
-# test = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-test = [7, 6, 5, 4, 3, 2, 1]
+test = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
+# test = [8, 6, 5, 4, 3, 2, 1]
 test_tree = Tree.new(test)
 puts test_tree.pretty_print
-p test_tree.find(7)
+p test_tree.level_order
+test_tree.insert(107)
+puts test_tree.pretty_print
+p test_tree.level_order
 # puts test_tree.pretty_print
