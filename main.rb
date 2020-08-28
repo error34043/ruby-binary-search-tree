@@ -34,6 +34,25 @@ class Tree
     root = Node.new(array[mid], build_tree(left_arr), build_tree(right_arr))
   end
 
+  def insert(data, target_node = @root)
+    new_node = Node.new(data)
+    return new_node if target_node.nil?
+    comparison = new_node <=> target_node
+    if comparison == -1
+      target_node.left_child = insert(data, target_node.left_child)
+    elsif comparison == 1
+      target_node.right_child = insert(data, target_node.right_child)
+    else
+      return new_node
+    end
+
+    target_node
+  end
+
+  def delete
+
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -46,4 +65,7 @@ end
 # test = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 test = [7, 6, 5, 4, 3, 2, 1]
 test_tree = Tree.new(test)
+test_tree.insert(9)
+test_tree.insert(-3)
+test_tree.insert(3)
 puts test_tree.pretty_print
