@@ -75,6 +75,18 @@ class Tree
     target_node
   end
 
+  def find(value, target_node = @root)
+    comparison = value <=> target_node.data
+    case comparison
+    when 0
+      return target_node
+    when 1
+      find(value, target_node.right_child)
+    when -1
+      find(value, target_node.left_child)
+    end
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -88,5 +100,5 @@ end
 test = [7, 6, 5, 4, 3, 2, 1]
 test_tree = Tree.new(test)
 puts test_tree.pretty_print
-test_tree.delete(4)
-puts test_tree.pretty_print
+p test_tree.find(7)
+# puts test_tree.pretty_print
