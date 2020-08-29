@@ -76,6 +76,7 @@ class Tree
   end
 
   def find(value, target_node = @root)
+    return Node.new(0) if target_node.nil?
     comparison = value <=> target_node.data
     case comparison
     when 0
@@ -133,6 +134,26 @@ class Tree
     output
   end
 
+  def height(target_node)
+    return 0 if target_node.data == 0
+    return 0 if target_node.nil?
+
+    left_tree_height = height(target_node.left_child)
+    right_tree_height = height(target_node.right_child)
+
+    left_tree_height > right_tree_height ? left_tree_height + 1 : right_tree_height + 1
+  end
+
+  def depth(target_node, search_node = @root, level = 1)
+    return level if target_node == search_node
+    return 0 if target_node.data == 0
+
+    left_depth = depth(target_node, search_node.right_child, level + 1) unless search_node.right_child.nil?
+    right_depth = depth(target_node, search_node.left_child, level + 1) unless search_node.left_child.nil?
+
+    left_depth.nil? ? right_depth : left_depth
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -146,5 +167,6 @@ test = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 # test = [8, 6, 5, 4, 3, 2, 1]
 test_tree = Tree.new(test)
 puts test_tree.pretty_print
-p test_tree.postorder
-# puts test_tree.pretty_print
+test_data = 567
+test_node = test_tree.find(test_data)
+puts "Height of #{test_data} is #{test_tree.height(test_node)}"
