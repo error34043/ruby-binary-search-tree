@@ -31,15 +31,14 @@ class Tree
     mid = (array.length - 1) / 2
     left_arr = array.slice(0, mid)
     right_arr = array.slice(mid + 1, array.length - 1)
-    root = Node.new(array[mid], build_tree(left_arr), build_tree(right_arr))
+    Node.new(array[mid], build_tree(left_arr), build_tree(right_arr))
   end
 
   def insert(data, target_node = @root)
     new_node = Node.new(data)
     return new_node if target_node.nil?
 
-    comparison = new_node <=> target_node
-    case comparison
+    case new_node <=> target_node
     when -1
       target_node.left_child = insert(data, target_node.left_child)
     when 1
@@ -52,8 +51,9 @@ class Tree
 
   def successor(target_node)
     test_node = target_node
-    loop do      
+    loop do
       return test_node if test_node.left_child.nil?
+
       test_node = test_node.left_child
     end
   end
@@ -77,10 +77,10 @@ class Tree
 
   def find(value, target_node = @root)
     return Node.new(0) if target_node.nil?
-    comparison = value <=> target_node.data
-    case comparison
+
+    case value <=> target_node.data
     when 0
-      return target_node
+      target_node
     when 1
       find(value, target_node.right_child)
     when -1
@@ -90,12 +90,13 @@ class Tree
 
   def level_order(current_node = @root)
     return [] if current_node.nil?
+
     queue = [current_node]
     output = []
     until queue.empty?
       visiting = queue.shift
       output << visiting.data
-      queue << visiting.left_child unless visiting.left_child.nil? 
+      queue << visiting.left_child unless visiting.left_child.nil?
       queue << visiting.right_child unless visiting.right_child.nil?
     end
     output
@@ -135,7 +136,7 @@ class Tree
   end
 
   def height(target_node)
-    return 0 if target_node.nil? || target_node.data == 0
+    return 0 if target_node.nil? || target_node.data.zero?
 
     left_tree_height = height(target_node.left_child)
     right_tree_height = height(target_node.right_child)
@@ -145,7 +146,7 @@ class Tree
 
   def depth(target_node, search_node = @root, level = 1)
     return level if target_node == search_node
-    return 0 if target_node.data == 0
+    return 0 if target_node.data.zero?
 
     left_depth = depth(target_node, search_node.right_child, level + 1) unless search_node.right_child.nil?
     right_depth = depth(target_node, search_node.left_child, level + 1) unless search_node.left_child.nil?
@@ -157,11 +158,12 @@ class Tree
     return true if tree.nil?
 
     difference = (height(tree.right_child) - height(tree.left_child)).abs
-    return true if difference <= 1  && balanced?(tree.left_child) && balanced?(tree.right_child)
+    return true if difference <= 1 && balanced?(tree.left_child) && balanced?(tree.right_child)
+
     false
   end
 
-  def rebalance(tree = @root)
+  def rebalance(_ = @root)
     @root = build_tree(level_order) unless balanced?
   end
 
@@ -171,20 +173,3 @@ class Tree
     pretty_print(node.left_child, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left_child
   end
 end
-
-
-### TESTING
-test = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-# test = [8, 6, 5, 4, 3, 2, 1]
-test_tree = Tree.new(test)
-test_tree.insert(527)
-test_tree.insert(526)
-test_tree.insert(6)
-puts test_tree.pretty_print
-test_data = 8
-test_node = test_tree.find(test_data)
-puts "Is the tree balanced? #{test_tree.balanced?}"
-puts ''
-test_tree.rebalance
-puts test_tree.pretty_print
-# p test_tree.height(test_tree.root)
