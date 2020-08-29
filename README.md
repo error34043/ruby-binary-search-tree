@@ -13,3 +13,5 @@ The aim of this project is to write a program which is capable of constructing a
 9. depth - Takes a node and returns its depth in the BST
 8. balanced? - Returns true or false based on whether or not the tree is balanced, respectively
 9. rebalance - Rebalances an unbalanced tree
+
+[A project done as part of TOP's Ruby course.](https://theodinproject.com/courses/ruby-programming/lessons/data-structures-and-algorithms?ref=lnav)
