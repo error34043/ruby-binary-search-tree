@@ -135,8 +135,7 @@ class Tree
   end
 
   def height(target_node)
-    return 0 if target_node.data == 0
-    return 0 if target_node.nil?
+    return 0 if target_node.nil? || target_node.data == 0
 
     left_tree_height = height(target_node.left_child)
     right_tree_height = height(target_node.right_child)
@@ -154,6 +153,11 @@ class Tree
     left_depth.nil? ? right_depth : left_depth
   end
 
+  def balanced?(tree = @root)
+    return true if tree.nil?
+    [-1, 0, 1].include? height(tree.right_child) - height(tree.left_child) && balanced?(tree.left_child) && balanced?(tree.right_child)
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -166,7 +170,11 @@ end
 test = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 # test = [8, 6, 5, 4, 3, 2, 1]
 test_tree = Tree.new(test)
+test_tree.insert(527)
+test_tree.insert(526)
+test_tree.insert(6)
 puts test_tree.pretty_print
-test_data = 567
+test_data = 8
 test_node = test_tree.find(test_data)
-puts "Height of #{test_data} is #{test_tree.height(test_node)}"
+puts "Is the tree balanced? #{test_tree.balanced?}"
+# p test_tree.height(test_tree.root)
