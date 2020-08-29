@@ -155,7 +155,14 @@ class Tree
 
   def balanced?(tree = @root)
     return true if tree.nil?
-    [-1, 0, 1].include? height(tree.right_child) - height(tree.left_child) && balanced?(tree.left_child) && balanced?(tree.right_child)
+
+    difference = (height(tree.right_child) - height(tree.left_child)).abs
+    return true if difference <= 1  && balanced?(tree.left_child) && balanced?(tree.right_child)
+    false
+  end
+
+  def rebalance(tree = @root)
+    @root = build_tree(level_order) unless balanced?
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
@@ -177,4 +184,7 @@ puts test_tree.pretty_print
 test_data = 8
 test_node = test_tree.find(test_data)
 puts "Is the tree balanced? #{test_tree.balanced?}"
+puts ''
+test_tree.rebalance
+puts test_tree.pretty_print
 # p test_tree.height(test_tree.root)
